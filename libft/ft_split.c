@@ -12,32 +12,50 @@
 
 #include "libft.h"
 
-static size_t	break_content(char const *s, char c, char **out)
-{
-	char	*tmp;
-	size_t	idx;
+// static size_t	break_content(char const *s, char c, char **out)
+// {
+// 	char	*tmp;
+// 	size_t	idx;
 
-	tmp = (char *)ft_calloc(ft_strlen(s) + 1, sizeof(char));
-	if (tmp == NULL)
-		return (-1);
+// 	tmp = (char *)ft_calloc(ft_strlen(s) + 1, sizeof(char));
+// 	if (tmp == NULL)
+// 		return (-1);
+// 	idx = 0;
+// 	while (s[idx])
+// 	{
+// 		if (s[idx] != c)
+// 		{
+// 			tmp[idx] = s[idx];
+// 			idx++;
+// 		}
+// 		else
+// 			break ;
+// 	}
+// 	*out = ft_strdup(tmp);
+// 	if (*out == NULL)
+// 	{
+// 		free(tmp);
+// 		return (-1);
+// 	}
+// 	free(tmp);
+// 	return (idx);
+// }
+
+static ssize_t	break_content(char const *s, char c, char **out)
+{
+	ssize_t	idx;
+
 	idx = 0;
 	while (s[idx])
 	{
 		if (s[idx] != c)
-		{
-			tmp[idx] = s[idx];
 			idx++;
-		}
 		else
 			break ;
 	}
-	*out = ft_strdup(tmp);
+	*out = ft_substr(s, 0, idx);
 	if (*out == NULL)
-	{
-		free(tmp);
 		return (-1);
-	}
-	free(tmp);
 	return (idx);
 }
 
@@ -72,7 +90,7 @@ static void	free_output(char **output, size_t counter)
 char	**ft_split(char const *s, char c)
 {
 	char	**out;
-	size_t	idx;
+	ssize_t	idx;
 	size_t	count;
 
 	out = ft_calloc(count_words(s, c) + 1, sizeof(char *));
@@ -84,7 +102,7 @@ char	**ft_split(char const *s, char c)
 		if (*s != c)
 		{
 			idx = break_content(s, c, &out[++count]);
-			if ((long long)idx == -1)
+			if (idx == -1)
 			{
 				free_output(out, count);
 				return (NULL);

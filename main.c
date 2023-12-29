@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2023/12/29 03:43:21 by alberrod         ###   ########.fr       */
+/*   Updated: 2023/12/29 21:03:37 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ int	main(int argc, char **argv)
 		else if (idx == 2)
 		{
 			commands1 = ft_split(argv[idx], ' ');
-			// while (*commands)
-			// 	printf("cmd: %s\n", *commands++);
 		}
 		else
 			commands2 = ft_split(argv[idx], ' ');
@@ -56,11 +54,11 @@ int	main(int argc, char **argv)
 
 	int pid = fork();
 	if (pid == 0)
-		execve("/bin/ls", commands1, NULL);
+		execve(ft_sprintf("/bin/%s", commands1[0]), commands1, NULL);
 	else
 	{
 		wait(NULL);
-		execve("/bin/pwd", commands2, NULL);
+		execve(ft_sprintf("/bin/%s", commands2[0]), commands2, NULL);
 	}
 	return (0);
 }
