@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2023/12/29 21:03:37 by alberrod         ###   ########.fr       */
+/*   Updated: 2023/12/29 21:19:55 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,11 @@ int	main(int argc, char **argv)
 	char	**commands1;
 	char	**commands2;
 
-
+	if (argc != 5)
+	{
+		printf("Too many or few arguments. %d/4\n", argc - 1);
+		return (1);
+	}
 	idx = 0;
 	while (++idx < argc)
 	{
@@ -60,5 +64,6 @@ int	main(int argc, char **argv)
 		wait(NULL);
 		execve(ft_sprintf("/bin/%s", commands2[0]), commands2, NULL);
 	}
+
 	return (0);
 }

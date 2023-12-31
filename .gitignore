@@ -1,3 +1,6 @@
 *.out
 .DS_Store
 *.gch
+*.o
+*.a
+*.dSYM
