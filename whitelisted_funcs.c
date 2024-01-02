@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <fcntl.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 #include "libft/libft.h"
 
 // Redirect fd's with dup2()
@@ -41,6 +43,80 @@ void	permissions()
 		printf("You don't have read permissions\n");
 	else
 		printf("You can read the file\n");
+}
+
+// Fork duplicates a process
+// The processes always exit after doing their thing
+void	fork_processes()
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0) // The child process is always 0
+		printf("Child process with pid %d\n", getpid());
+	else
+	{
+		wait(NULL); // Guarantee the child is executed first
+		printf("Parent process with pid %d\n", getpid());
+	}
+}
+
+
+// Delete a file
+// Return: 0 if succesfully deleted. Anything else for errors
+void	deleter()
+{
+	if (unlink("something.txt") == 0)
+		printf("sucesfully removed");
+	else
+		printf("ups, something went wrong deleting the file");
+}
+
+// Create unidirectional data channels to just write or read (pipe)
+// what it's writen at one end fd[1] can be read at the other fd[0]
+// Ideally this communication is done with parent/child processes
+void	pipelines()
+{
+	int		pipefd[2];
+	int		original_stdout = dup(STDOUT_FILENO);
+	pid_t	pid;
+	char	buffer[256];
+	char	*args[] = {"echo", "Hello", "World", NULL};
+	char	*hi;
+
+	if (pipe(pipefd) == -1)
+	{
+		// error message to the stderr
+		// strerror passes a pointer to the error
+		perror("something went wrong when doing piping");
+		printf("an error occurred: %s", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("something went wrong when forking");
+		printf("an error occurred: %s", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+		execve("/bin/echo", args, NULL);
+	else
+	{
+		wait(NULL);
+		dup2(original_stdout, STDOUT_FILENO);
+		close(pipefd[1]);
+		read(pipefd[0], buffer, sizeof(buffer)); // Reads from the stdout execve
+		close(pipefd[0]);
+		hi = ft_strdup(buffer);
+		printf("%s", hi);
+	}
+
 }
 
 
@@ -124,7 +200,11 @@ int	main(int argc, char **argv, char **envp)
 	
 	// *envp retrieves all the env variables
 	// It's not recommended, but the alternative is a forbidden function
-	external_program(envp);
+	// external_program(envp);
+	
+	// fork_processes();
+	// pipelines();
+	deleter();
 
 	return (0);
 }
