@@ -43,39 +43,85 @@ void	permissions()
 		printf("You can read the file\n");
 }
 
+
+// This is not working because execve doesn't know which is the value of $PATH
+// it currently is just printing what it's echoed.
+// But, this function is very useful to explain how to redirect outputs.
+//
+//
+// char	*get_path()
+// {
+// 	int		original_stdout = dup(STDOUT_FILENO);
+// 	int		pipes[2];
+// 	pid_t	pid;
+// 	char	*path;
+// 	char	buffer[4096];
+// 	char	*args[] = {"echo", "$PATH", NULL};
+//
+// 	pipe(pipes);
+// 	dup2(pipes[1], STDOUT_FILENO);
+// 	pid = fork();
+// 	if (pid == 0)
+// 		execve("/bin/echo", args, NULL);
+// 	else
+// 	{
+// 		wait(NULL);
+// 		dup2(original_stdout, STDOUT_FILENO);
+// 		close(pipes[1]);
+// 		read(pipes[0], buffer, sizeof(buffer));
+// 		path = ft_strdup(buffer);
+// 		printf("%s", buffer);
+// 	}
+//
+// 	return (path);
+// }
+
+char	**get_path(char **env)
+{
+	char	**path_env;
+	char	**path_array;
+	while (*env)
+	{
+		if (ft_strncmp(*env, "PATH=", 5) == 0)
+		{
+			path_env = ft_split(*env, '=');
+			path_array = ft_split(path_env[1], ':');
+			break ;
+		}
+		env++;
+	}
+	return (path_array);
+}
+
 // Sys calls (executing another program within the program)
 // WARNING: execve replaces the current process with a mirror process
 // that's why it should be used with fork();
 // Everything after execve in the same process won't be executed
-void	external_program()
+void	external_program(char **envp)
 {
+	char	**path;
+	char	*exec_path;
 	// Takes 3 args:
 	//path to the program | command line arguments | array of env_variables or NULL
 	char *args[] = {"ls", "-la", NULL};
-	char *path_str = "/Users/albertorodriguez/Library/pnpm:/Users/albertorodriguez/.volta/bin:/Users/albertorodriguez/opt/anaconda3/bin:/Users/albertorodriguez/.nimble/bin:/Users/albertorodriguez/others_utility_apps/epub-translator:/Users/albertorodriguez/my_own_utility_apps/itt-to-srt:/Users/albertorodriguez/my_own_utility_apps:/Users/albertorodriguez/cli_apple_hit:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/albertorodriguez/.cargo/bin:/Applications/kitty.app/Contents/MacOS:/Users/Dz/anaconda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/Dz/.rvm/bin";
 
-	char **path;
-	char	*exec_path;
-	path = ft_split(path_str, ':');
-
+	path = get_path(envp);
 	while (*path != NULL)
 	{
 		exec_path = ft_sprintf("%s/%s", *path, args[0]);
-		if (execve(exec_path, args, NULL) != -1)
+		if (execve(exec_path, args, envp) != -1)
 			break ;
 		path++;
 	}
-
-	// while (*(path++))
-	// 	printf("path: %s\n", *path);
 	
 	// execve("/bin/ls", args, NULL);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	// redirect_fd();
 	// permissions();
-	external_program();
+	external_program(envp);
+
 	return (0);
 }
