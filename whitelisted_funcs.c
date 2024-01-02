@@ -121,6 +121,9 @@ int	main(int argc, char **argv, char **envp)
 {
 	// redirect_fd();
 	// permissions();
+	
+	// *envp retrieves all the env variables
+	// It's not recommended, but the alternative is a forbidden function
 	external_program(envp);
 
 	return (0);
