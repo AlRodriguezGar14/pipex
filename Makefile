@@ -6,7 +6,7 @@
 #    By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/03 02:14:31 by alberrod          #+#    #+#              #
-#    Updated: 2024/01/03 02:19:54 by alberrod         ###   ########.fr        #
+#    Updated: 2024/01/03 03:26:07 by alberrod         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,6 @@ fclean: clean
 re: fclean $(NAME)
 
 test:
-	cc main.c pipex.a libft/libft.a && ./a.out hola "grep ol" pwd mundo 
+	cc main.c pipex.a libft/libft.a && ./a.out hola.txt "ls -l" "wc -w" mundo.txt 
 .PHONY: all clean fclean re test
  
