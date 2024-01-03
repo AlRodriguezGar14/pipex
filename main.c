@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2023/12/29 21:19:55 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/03 02:17:28 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,46 +24,29 @@
 // open, close, read, write, malloc, free, perror, strerror, access, dup, dup2, execve, exit, fork, pipe, unlink, wait, waitpid
 
 #include "libft/libft.h"
+#include "pipex.h"
 
-
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
-	int 	idx;
-	char	*input_file = NULL;
-	char	*output_file = NULL;
-	char	**commands1;
-	char	**commands2;
+	char	*file1;
+	char	*file2;
+	t_cmd	*cmd_list = NULL;
+	int		idx;
 
-	if (argc != 5)
-	{
-		printf("Too many or few arguments. %d/4\n", argc - 1);
+	// Sanitize input
+	if (argc < 5)
 		return (1);
-	}
-	idx = 0;
-	while (++idx < argc)
-	{
-		if (idx == 1)
-			input_file = argv[idx];
-		else if (idx == argc - 1)
-			output_file = argv[idx];
-		else if (idx == 2)
-		{
-			commands1 = ft_split(argv[idx], ' ');
-		}
-		else
-			commands2 = ft_split(argv[idx], ' ');
-	}
-	printf("input file: %s\n", input_file);
-	printf("output file: %s\n", output_file);
+	// Parse files	
+	file1 = ft_strdup(argv[1]);
+	file2 = ft_strdup(argv[argc - 1]);
+	idx = 2;
+	while (idx < argc -1)
+		ft_cmdadd_back(&cmd_list, ft_cmdnew(argv[idx++]));
 
-	int pid = fork();
-	if (pid == 0)
-		execve(ft_sprintf("/bin/%s", commands1[0]), commands1, NULL);
-	else
-	{
-		wait(NULL);
-		execve(ft_sprintf("/bin/%s", commands2[0]), commands2, NULL);
-	}
 
+	printf("file1: %s\n", file1);
+	printf("file2: %s\n", file2);
+	ft_cmditer(cmd_list, print_commands);
+	
 	return (0);
 }
