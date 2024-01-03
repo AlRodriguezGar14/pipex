@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/03 03:42:58 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/03 04:09:07 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	parse_commands(int argc, char **argv, t_cmd **cmd_list)
 		ft_cmdadd_back(cmd_list, ft_cmdnew(argv[idx++]));
 }
 
-void	exec_cmd(t_cmd *cmd_list, char *file, char **path, char **envp)
+void	exec_cmd(t_cmd *cmd_list, char **path, char **envp)
 {
 	char	*exec_path;
 
@@ -95,14 +95,34 @@ int	main(int argc, char **argv, char **envp)
 	original_stdout = dup(STDOUT_FILENO);
 	original_stdin = dup(STDIN_FILENO);
 
-	int	fd_in = open("hola.txt", O_RDONLY);
+	// file1 is the stdin; tmp is the stdout
+	int	fd_in = open(file1, O_RDONLY);
+	int	fd_tmp = open("tmp.txt", O_WRONLY | O_CREAT, 0644);
 	dup2(fd_in, STDIN_FILENO);
+	dup2(fd_tmp, STDOUT_FILENO);
 	close(fd_in);
+	close(fd_tmp);
 	pid = fork();
 	if (pid == 0)
-		exec_cmd(cmd_list, "something", path, envp); // exec the first cmd
+		exec_cmd(cmd_list, path, envp); // exec the first cmd
 	else
 		wait(NULL);
-	dup2(original_stdin, STDIN_FILENO);
+	// set tmp as stdin
+	fd_tmp = open("tmp.txt", O_RDONLY);
+	dup2(fd_tmp, STDIN_FILENO);
+	close(fd_tmp);
+	// set stdout to the given file
+	int	fd_out = open(file2, O_WRONLY | O_CREAT, 0644);
+	dup2(fd_out, STDOUT_FILENO);
+	close(fd_out);
+
+	// repeat process of executing
+	pid = fork();
+	if (pid == 0)
+		exec_cmd(cmd_list->next, path, envp);
+	else
+		wait(NULL);
+	dup2(original_stdout, STDOUT_FILENO);
+	unlink("tmp.txt");
 	return (0);
 }
