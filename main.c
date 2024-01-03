@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/03 03:25:46 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/03 03:42:58 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	parse_commands(int argc, char **argv, t_cmd **cmd_list)
 void	exec_cmd(t_cmd *cmd_list, char *file, char **path, char **envp)
 {
 	char	*exec_path;
+
 	while(*path != NULL)
 	{
 		exec_path = ft_sprintf("%s/%s", *path, cmd_list->content[0]);
@@ -92,16 +93,16 @@ int	main(int argc, char **argv, char **envp)
 
 	// Backup the original stdout/in
 	original_stdout = dup(STDOUT_FILENO);
-	original_stdout = dup(STDIN_FILENO);
+	original_stdin = dup(STDIN_FILENO);
 
+	int	fd_in = open("hola.txt", O_RDONLY);
+	dup2(fd_in, STDIN_FILENO);
+	close(fd_in);
 	pid = fork();
 	if (pid == 0)
-	{
-		printf("child process\n");
 		exec_cmd(cmd_list, "something", path, envp); // exec the first cmd
-	}
 	else
 		wait(NULL);
-	printf("parent process\n");
+	dup2(original_stdin, STDIN_FILENO);
 	return (0);
 }
