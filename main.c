@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/04 06:19:30 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/04 07:45:56 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,30 @@ int	set_out_file(int *fd_pipe, char *file2)
 	return (0);
 }
 
+void	parent_process(char *file, int *fd)
+{
+	int	fd_out;
+	
+	fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_out == -1)
+		exit(EXIT_FAILURE);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(fd_out, STDOUT_FILENO);
+	close(fd[1]);
+}
+
+void	child_process(char *file, int *fd)
+{
+	if (access(file, F_OK) != 0)
+		exit(EXIT_FAILURE);
+	if (access(file, R_OK) != 0)
+		exit(EXIT_FAILURE);
+	dup2(fd[1], STDOUT_FILENO);
+	dup2(open(file, O_RDONLY), STDIN_FILENO);
+	close(fd[0]);
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*file1;
@@ -84,6 +108,7 @@ int	main(int argc, char **argv, char **envp)
 	t_cmd	*cmd_list;
 	char	**path;
 	int		fd_pipe[2];
+	int		pid;
 
 	if (argc < 5)
 		return (1);
@@ -98,9 +123,24 @@ int	main(int argc, char **argv, char **envp)
 		exit(1);
 	}
 
-	set_out_file(fd_pipe, file2);
-	launch_cmd(cmd_list->next, path, envp);
-	set_in_file(fd_pipe, file1);
-	launch_cmd(cmd_list, path, envp);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Fork error");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		child_process(file1, fd_pipe);
+		exec_cmd(cmd_list, path, envp);
+	}
+	parent_process(file2, fd_pipe);
+	exec_cmd(cmd_list->next, path, envp);
+	close(fd_pipe[0]);
+	close(fd_pipe[1]);
+	// set_out_file(fd_pipe, file2);
+	// launch_cmd(cmd_list->next, path, envp);
+	// set_in_file(fd_pipe, file1);
+	// launch_cmd(cmd_list, path, envp);
 	return (0);
 }
