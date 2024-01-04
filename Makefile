@@ -6,7 +6,7 @@
 #    By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/03 02:14:31 by alberrod          #+#    #+#              #
-#    Updated: 2024/01/04 03:30:07 by alberrod         ###   ########.fr        #
+#    Updated: 2024/01/04 03:42:51 by alberrod         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ RM       = rm -rf
 #CMD_1	 = "grep ol"
 CMD_1	 = "ls -la"
 
-CFILES = generate_cmd_list_utils.c
+CFILES = generate_cmd_list_utils.c parse_inputs.c
 
 OFILES = $(CFILES:.c=.o)
 

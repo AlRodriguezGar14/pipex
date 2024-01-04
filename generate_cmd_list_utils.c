@@ -6,12 +6,11 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 02:10:19 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/03 02:47:53 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/04 03:54:50 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 t_cmd	*ft_cmdnew(void *content)
 {
