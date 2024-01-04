@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/04 03:52:22 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/04 04:43:34 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,21 @@ void	exec_cmd(t_cmd *cmd_list, char **path, char **envp)
 }
 
 // Reads from the in file. Output to the write channel
-void	set_in_file(int fd_pipe, char *file1)
+int	set_in_file(int fd_pipe, char *file1)
 {
 	int	fd_in;
 
 	fd_in = open(file1, O_RDONLY);
+	if (fd_in == -1)
+	{
+		perror("cannot open fd in");
+		exit (EXIT_FAILURE);
+	}
 	dup2(fd_in, STDIN_FILENO);
 	dup2(fd_pipe, STDOUT_FILENO);
 	close(fd_in);
 	close(fd_pipe);
+	return (0);
 }
 
 void	launch_cmd(t_cmd *cmd_list, char **path, char **envp)
@@ -51,18 +57,26 @@ void	launch_cmd(t_cmd *cmd_list, char **path, char **envp)
 		exec_cmd(cmd_list, path, envp);
 	else
 		wait(NULL);
+		exit(EXIT_SUCCESS);
 }
 
 // Reads from the read channel. Output to the output file 
-void	set_out_file(int fd_pipe, char *file2)
+int	set_out_file(int fd_pipe, char *file2)
 {
 	int	fd_out;
 
 	dup2(fd_pipe, STDIN_FILENO);
 	close(fd_pipe);
-	fd_out = open(file2, O_WRONLY | O_CREAT, 0644 | O_APPEND);
+	// fd_out = open(file2, O_WRONLY | O_CREAT, 0644 | O_APPEND);
+	fd_out = open(file2, O_WRONLY);
+	if (fd_out == -1)
+	{
+		perror("cannot open fd_out");
+		exit (EXIT_FAILURE);
+	}
 	dup2(fd_out, STDOUT_FILENO);
 	close(fd_out);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -83,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	if (pipe(fd_pipe) == -1)
 	{
 		perror("pipe");
-		exit(-1);
+		exit(1);
 	}
 	set_in_file(fd_pipe[1], file1);
 	launch_cmd(cmd_list, path, envp);

@@ -6,26 +6,28 @@
 #    By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/03 02:14:31 by alberrod          #+#    #+#              #
-#    Updated: 2024/01/04 03:42:51 by alberrod         ###   ########.fr        #
+#    Updated: 2024/01/04 04:19:18 by alberrod         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC       = cc
 HEADERS_DIR = .
 CFLAGS   = -Wall -Wextra -Werror -g -I $(HEADERS_DIR)
-NAME     = pipex.a
+NAME     = pipex
 RM       = rm -rf
 #CMD_1	 = "grep ol"
 CMD_1	 = "ls -la"
 
-CFILES = generate_cmd_list_utils.c parse_inputs.c
+LIBFT_DIR = libft/
+CFILES = main.c generate_cmd_list_utils.c parse_inputs.c
 
 OFILES = $(CFILES:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OFILES)
-	ar rcs $(NAME) $(OFILES)
+	$(CC) $(CFLAGS) -o $(NAME) $(OFILES) -L $(LIBFT_DIR) -lft
+	# ar rcs $(NAME) $(OFILES)
 
 clean:
 	$(RM) $(OFILES)
@@ -36,6 +38,6 @@ fclean: clean
 re: fclean $(NAME)
 
 test:
-	cc main.c pipex.a libft/libft.a && ./a.out hola.txt ${CMD_1} "wc -w" outfile.txt 
+	./pipex hola.txt ${CMD_1} "wc -w" outfile.txt 
 .PHONY: all clean fclean re test
  
