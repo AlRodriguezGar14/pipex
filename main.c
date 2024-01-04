@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/04 04:43:34 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/04 06:19:30 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ void	exec_cmd(t_cmd *cmd_list, char **path, char **envp)
 	}
 	if (*path == NULL)
 	{
-		perror("execve");
+		perror("execve: command not found");
 		exit(EXIT_FAILURE);
 	}
 }
 
 // Reads from the in file. Output to the write channel
-int	set_in_file(int fd_pipe, char *file1)
+int	set_in_file(int *fd_pipe, char *file1)
 {
 	int	fd_in;
 
@@ -42,9 +42,9 @@ int	set_in_file(int fd_pipe, char *file1)
 		exit (EXIT_FAILURE);
 	}
 	dup2(fd_in, STDIN_FILENO);
-	dup2(fd_pipe, STDOUT_FILENO);
+	dup2(fd_pipe[0], STDOUT_FILENO);
 	close(fd_in);
-	close(fd_pipe);
+	close(fd_pipe[1]);
 	return (0);
 }
 
@@ -56,19 +56,17 @@ void	launch_cmd(t_cmd *cmd_list, char **path, char **envp)
 	if (pid == 0)
 		exec_cmd(cmd_list, path, envp);
 	else
-		wait(NULL);
-		exit(EXIT_SUCCESS);
+		waitpid(pid, NULL, 0);
 }
 
 // Reads from the read channel. Output to the output file 
-int	set_out_file(int fd_pipe, char *file2)
+int	set_out_file(int *fd_pipe, char *file2)
 {
 	int	fd_out;
 
-	dup2(fd_pipe, STDIN_FILENO);
-	close(fd_pipe);
-	// fd_out = open(file2, O_WRONLY | O_CREAT, 0644 | O_APPEND);
-	fd_out = open(file2, O_WRONLY);
+	dup2(fd_pipe[1], STDIN_FILENO);
+	close(fd_pipe[0]);
+	fd_out = open(file2, O_WRONLY | O_CREAT, 0644);
 	if (fd_out == -1)
 	{
 		perror("cannot open fd_out");
@@ -99,9 +97,10 @@ int	main(int argc, char **argv, char **envp)
 		perror("pipe");
 		exit(1);
 	}
-	set_in_file(fd_pipe[1], file1);
-	launch_cmd(cmd_list, path, envp);
-	set_out_file(fd_pipe[0], file2);
+
+	set_out_file(fd_pipe, file2);
 	launch_cmd(cmd_list->next, path, envp);
+	set_in_file(fd_pipe, file1);
+	launch_cmd(cmd_list, path, envp);
 	return (0);
 }
