@@ -6,13 +6,13 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/04 07:45:56 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/05 15:06:21 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	exec_cmd(t_cmd *cmd_list, char **path, char **envp)
+static void	exec_cmd(t_cmd *cmd_list, char **path, char **envp)
 {
 	char	*exec_path;
 
@@ -30,117 +30,27 @@ void	exec_cmd(t_cmd *cmd_list, char **path, char **envp)
 	}
 }
 
-// Reads from the in file. Output to the write channel
-int	set_in_file(int *fd_pipe, char *file1)
-{
-	int	fd_in;
-
-	fd_in = open(file1, O_RDONLY);
-	if (fd_in == -1)
-	{
-		perror("cannot open fd in");
-		exit (EXIT_FAILURE);
-	}
-	dup2(fd_in, STDIN_FILENO);
-	dup2(fd_pipe[0], STDOUT_FILENO);
-	close(fd_in);
-	close(fd_pipe[1]);
-	return (0);
-}
-
-void	launch_cmd(t_cmd *cmd_list, char **path, char **envp)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == 0)
-		exec_cmd(cmd_list, path, envp);
-	else
-		waitpid(pid, NULL, 0);
-}
-
-// Reads from the read channel. Output to the output file 
-int	set_out_file(int *fd_pipe, char *file2)
-{
-	int	fd_out;
-
-	dup2(fd_pipe[1], STDIN_FILENO);
-	close(fd_pipe[0]);
-	fd_out = open(file2, O_WRONLY | O_CREAT, 0644);
-	if (fd_out == -1)
-	{
-		perror("cannot open fd_out");
-		exit (EXIT_FAILURE);
-	}
-	dup2(fd_out, STDOUT_FILENO);
-	close(fd_out);
-	return (0);
-}
-
-void	parent_process(char *file, int *fd)
-{
-	int	fd_out;
-	
-	fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd_out == -1)
-		exit(EXIT_FAILURE);
-	dup2(fd[0], STDIN_FILENO);
-	dup2(fd_out, STDOUT_FILENO);
-	close(fd[1]);
-}
-
-void	child_process(char *file, int *fd)
-{
-	if (access(file, F_OK) != 0)
-		exit(EXIT_FAILURE);
-	if (access(file, R_OK) != 0)
-		exit(EXIT_FAILURE);
-	dup2(fd[1], STDOUT_FILENO);
-	dup2(open(file, O_RDONLY), STDIN_FILENO);
-	close(fd[0]);
-}
-
-
 int	main(int argc, char **argv, char **envp)
 {
-	char	*file1;
-	char	*file2;
+	char	*files[2];
 	t_cmd	*cmd_list;
 	char	**path;
 	int		fd_pipe[2];
 	int		pid;
 
-	if (argc < 5)
-		return (1);
-	file1 = parse_file(argv, 1);
-	file2 = parse_file(argv, argc - 1);
 	cmd_list = NULL;
-	parse_commands(argc, argv, &cmd_list);
 	path = extract_path(envp);
-	if (pipe(fd_pipe) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("Fork error");
-		exit(EXIT_FAILURE);
-	}
+	parse_input(argc, argv, files, &cmd_list);
+	create_pipes(fd_pipe);
+	fork_process(&pid);
 	if (pid == 0)
 	{
-		child_process(file1, fd_pipe);
+		read_process(files[STDIN_FILENO], fd_pipe);
 		exec_cmd(cmd_list, path, envp);
 	}
-	parent_process(file2, fd_pipe);
+	write_process(files[STDOUT_FILENO], fd_pipe);
 	exec_cmd(cmd_list->next, path, envp);
 	close(fd_pipe[0]);
 	close(fd_pipe[1]);
-	// set_out_file(fd_pipe, file2);
-	// launch_cmd(cmd_list->next, path, envp);
-	// set_in_file(fd_pipe, file1);
-	// launch_cmd(cmd_list, path, envp);
 	return (0);
 }

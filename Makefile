@@ -6,7 +6,7 @@
 #    By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/03 02:14:31 by alberrod          #+#    #+#              #
-#    Updated: 2024/01/04 04:19:18 by alberrod         ###   ########.fr        #
+#    Updated: 2024/01/05 15:04:15 by alberrod         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ RM       = rm -rf
 CMD_1	 = "ls -la"
 
 LIBFT_DIR = libft/
-CFILES = main.c generate_cmd_list_utils.c parse_inputs.c
+CFILES = main.c generate_cmd_list_utils.c parse_inputs.c processes.c
 
 OFILES = $(CFILES:.c=.o)
 

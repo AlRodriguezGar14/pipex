@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 03:42:07 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/04 03:52:33 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/05 14:50:22 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	**extract_path(char **envp)
 	return (path_array);
 }
 
-void	parse_commands(int argc, char **argv, t_cmd **cmd_list)
+static void	parse_commands(int argc, char **argv, t_cmd **cmd_list)
 {
 	int	idx;
 
@@ -40,10 +40,19 @@ void	parse_commands(int argc, char **argv, t_cmd **cmd_list)
 		ft_cmdadd_back(cmd_list, ft_cmdnew(argv[idx++]));
 }
 
-char	*parse_file(char **str_list, int idx)
+static char	*parse_file(char **str_list, int idx)
 {
 	char	*file;
 
 	file = ft_strdup(str_list[idx]);
 	return (file);
+}
+
+void	parse_input(int argc, char **argv, char *files[2], t_cmd **cmd_list)
+{
+	if (argc < 5)
+		exit (EXIT_FAILURE);
+	files[STDIN_FILENO] = parse_file(argv, 1);
+	files[STDOUT_FILENO] = parse_file(argv, argc - 1);
+	parse_commands(argc, argv, cmd_list);
 }
