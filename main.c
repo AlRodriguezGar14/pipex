@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/05 15:06:21 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:09:26 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,21 @@
 static void	exec_cmd(t_cmd *cmd_list, char **path, char **envp)
 {
 	char	*exec_path;
+	char	*err_mssg;
 
 	while (*path != NULL)
 	{
 		exec_path = ft_sprintf("%s/%s", *path, cmd_list->content[0]);
-		if (execve(exec_path, cmd_list->content, envp) != -1)
-			break ;
+		if (access(exec_path, X_OK) == 0)
+			execve(exec_path, cmd_list->content, envp);
 		path++;
 	}
 	if (*path == NULL)
 	{
-		perror("execve: command not found");
-		exit(EXIT_FAILURE);
+		err_mssg = ft_sprintf("Command not found: %s\n", cmd_list->content[0]);
+		write(STDERR_FILENO, err_mssg, ft_strlen(err_mssg));
+		// exit(EXIT_FAILURE);
+		exit(1);
 	}
 }
 

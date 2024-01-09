@@ -6,13 +6,13 @@
 #    By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/03 02:14:31 by alberrod          #+#    #+#              #
-#    Updated: 2024/01/05 15:34:08 by alberrod         ###   ########.fr        #
+#    Updated: 2024/01/09 20:55:18 by alberrod         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC       = cc
 HEADERS_DIR = .
-CFLAGS   = -Wall -Wextra -Werror -g -I $(HEADERS_DIR) -I $(LIBFT)
+CFLAGS   = -Wall -Wextra -Werror -fsanitize=address -g3 -I $(HEADERS_DIR) -I $(LIBFT)
 NAME     = pipex
 RM       = rm -rf
 

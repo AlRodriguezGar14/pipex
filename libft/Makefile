@@ -6,7 +6,7 @@
 #    By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/13 18:30:09 by alberrod          #+#    #+#              #
-#    Updated: 2023/12/29 20:50:21 by alberrod         ###   ########.fr        #
+#    Updated: 2024/01/09 17:21:20 by alberrod         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,9 @@ CFILES = ft_calloc.c ft_isdigit.c ft_memcmp.c ft_putchar_fd.c ft_split.c \
 	   ft_memmove.c ft_putnbr_fd.c ft_strdup.c ft_strlcpy.c ft_strnstr.c \
 	   ft_tolower.c ft_bzero.c ft_isascii.c ft_memchr.c ft_memset.c \
 	   ft_putstr_fd.c ft_striteri.c ft_strlen.c ft_strrchr.c ft_toupper.c \
-	   ft_sprintf.c sprintf_utils.c
+	   ft_sprintf.c sprintf_utils.c \
+	   ft_printf.c printers.c \
+	   get_next_line.c
 
 OFILES = $(CFILES:.c=.o)
 

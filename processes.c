@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:00:30 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/05 15:07:05 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:35:24 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ void	fork_process(int *pid)
 void	write_process(char *file, int *fd)
 {
 	int	fd_out;
-
-	fd_out = open(file, O_WRONLY | O_CREAT, 0644 | O_TRUNC);
+	
+	close(fd[STDOUT_FILENO]);
+	fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out == -1)
 	{
 		perror("Can't create/write on the output file");
@@ -43,13 +44,13 @@ void	write_process(char *file, int *fd)
 	}
 	dup2(fd[STDIN_FILENO], STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
-	close(fd[STDOUT_FILENO]);
 }
 
 void	read_process(char *file, int *fd)
 {
 	int	fd_in;
 
+	close(fd[STDIN_FILENO]);
 	if (access(file, F_OK) != 0)
 	{
 		perror("Input file doesn't exist");
@@ -68,5 +69,4 @@ void	read_process(char *file, int *fd)
 	}
 	dup2(fd[STDOUT_FILENO], STDOUT_FILENO);
 	dup2(fd_in, STDIN_FILENO);
-	close(fd[STDIN_FILENO]);
 }

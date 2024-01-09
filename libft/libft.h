@@ -6,20 +6,30 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 22:17:45 by alberrod          #+#    #+#             */
-/*   Updated: 2023/12/29 20:50:04 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 17:26:03 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
 # include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <fcntl.h>
 
-# define HEX "0123456789ABCDEF"
+# define FD_STDOUT 1
+# define FD_STDERR 2
+# define MAX_INT_LEN 12
+# define MAX_LONG_LEN 22
+# define HEXL "0123456789abcdef"
+# define HEXU "0123456789ABCDEF"
 
 typedef struct s_list
 {
@@ -79,5 +89,16 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 char				*ft_sprintf(char const *container, ...);
 char				*ft_puthexa_str(size_t n);
 char				*ft_putaddress_str(unsigned long p);
+
+// Printf && Printf utils
+int					ft_printf(const char *fmt, ...);
+int					ft_printstr(char *s);
+int					ft_printnbr(long nbr, int base, char *nbr_formatter);
+int					ft_printchar(int c);
+int					ft_print_addr(unsigned long nbr,
+						int base, char *nbr_formatter);
+
+// Get next line 
+char				*get_next_line(int fd);
 
 #endif

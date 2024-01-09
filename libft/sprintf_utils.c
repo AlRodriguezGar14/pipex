@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 20:45:50 by alberrod          #+#    #+#             */
-/*   Updated: 2023/12/29 20:57:45 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 16:58:30 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_puthexa_str(size_t n)
 	i = 15;
 	while (n > 0)
 	{
-		buffer[i] = HEX[n % 16];
+		buffer[i] = HEXU[n % 16];
 		n /= 16;
 		i--;
 	}
@@ -42,7 +42,7 @@ char	*ft_putaddress_str(unsigned long p)
 	buffer[1] = 'x';
 	while (p > 0)
 	{
-		buffer[i] = HEX[p % 16];
+		buffer[i] = HEXU[p % 16];
 		p /= 16;
 		i--;
 	}

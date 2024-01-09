@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 03:42:07 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/05 14:50:22 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:02:39 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ static char	*parse_file(char **str_list, int idx)
 {
 	char	*file;
 
-	file = ft_strdup(str_list[idx]);
+	if (str_list[idx])
+		file = ft_strdup(str_list[idx]);
+	else
+		file = NULL;
 	return (file);
 }
 

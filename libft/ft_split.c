@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alberrod <alberrod@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 21:35:50 by alberrod          #+#    #+#             */
-/*   Updated: 2023/12/15 08:05:06 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:11:30 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
