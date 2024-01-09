@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/09 21:09:26 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 22:03:11 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ static void	exec_cmd(t_cmd *cmd_list, char **path, char **envp)
 	{
 		err_mssg = ft_sprintf("Command not found: %s\n", cmd_list->content[0]);
 		write(STDERR_FILENO, err_mssg, ft_strlen(err_mssg));
-		// exit(EXIT_FAILURE);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 }
 

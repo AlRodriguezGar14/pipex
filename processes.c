@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:00:30 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/09 21:35:24 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 22:03:49 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	fork_process(int *pid)
 void	write_process(char *file, int *fd)
 {
 	int	fd_out;
-	
+
 	close(fd[STDOUT_FILENO]);
 	fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out == -1)

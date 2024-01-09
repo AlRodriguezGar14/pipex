@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 22:17:45 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/09 17:26:03 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 22:01:26 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 char				*ft_sprintf(char const *container, ...);
 char				*ft_puthexa_str(size_t n);
 char				*ft_putaddress_str(unsigned long p);
+char				*str_or_null(const char *str);
 
 // Printf && Printf utils
 int					ft_printf(const char *fmt, ...);

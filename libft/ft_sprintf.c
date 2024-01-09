@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 20:27:50 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/09 21:17:50 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:57:24 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,6 @@
 // A ultra-minimalistic version of sprintf
 // Currently it's only useful for appending strings and ints
 // Pending to improve
-static char *str_or_null(const char *str)
-{
-	char *out;
-
-	if (!str)
-		out = ft_strdup("(null)");
-	else
-		out = ft_strdup(str);
-	return (out);
-}
 
 static char	*printer(char const *container, va_list *args)
 {

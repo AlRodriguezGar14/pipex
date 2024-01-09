@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 20:45:50 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/09 16:58:30 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:58:03 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,15 @@ char	*ft_putaddress_str(unsigned long p)
 	}
 	res = strdup(&buffer[i + 1]);
 	return (res);
+}
+
+char	*str_or_null(const char *str)
+{
+	char	*out;
+
+	if (!str)
+		out = ft_strdup("(null)");
+	else
+		out = ft_strdup(str);
+	return (out);
 }
