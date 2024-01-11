@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 02:10:49 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/11 13:43:09 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/11 14:13:55 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 // definition of errors
 # define NO_SUCH_FILE 2
 # define CMD_NOT_FOUND 127
+# define WRONG_INPUT 2
 
 typedef struct s_cmd
 {

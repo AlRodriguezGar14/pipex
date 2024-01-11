@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 02:32:13 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/11 13:56:39 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:31:45 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	main(int argc, char **argv, char **envp)
 	int		fd_pipe[2];
 	int		pid;
 
+	if (argc != 5)
+		exit (2);
 	cmd_list = NULL;
 	path = extract_path(envp);
 	parse_input(argc, argv, files, &cmd_list);
@@ -53,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	write_process(files[STDOUT_FILENO], fd_pipe);
 	exec_cmd(cmd_list->next, path, envp);
-	close(fd_pipe[0]);
-	close(fd_pipe[1]);
+	// close(fd_pipe[0]);
+	// close(fd_pipe[1]);
 	return (0);
 }

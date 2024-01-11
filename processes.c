@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:00:30 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/11 13:43:27 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/11 14:15:56 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	read_process(char *file, int *fd)
 	{
 		error = ft_sprintf("no such file or directory: %s\n", file);
 		write(STDERR_FILENO, error, ft_strlen(error));
-		exit(2);
+		exit(NO_SUCH_FILE);
 	}
 	if (access(file, R_OK) != 0)
 	{
