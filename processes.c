@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:00:30 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/09 22:03:49 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/11 13:43:27 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,16 @@ void	fork_process(int *pid)
 
 void	write_process(char *file, int *fd)
 {
-	int	fd_out;
+	int		fd_out;
+	char	*error;
 
 	close(fd[STDOUT_FILENO]);
 	fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out == -1)
 	{
-		perror("Can't create/write on the output file");
-		exit(EXIT_FAILURE);
+		error = ft_sprintf("no such file or directory: %s\n", file);
+		write(STDERR_FILENO, error, ft_strlen(error));
+		exit(NO_SUCH_FILE);
 	}
 	dup2(fd[STDIN_FILENO], STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
@@ -48,13 +50,15 @@ void	write_process(char *file, int *fd)
 
 void	read_process(char *file, int *fd)
 {
-	int	fd_in;
+	int		fd_in;
+	char	*error;
 
 	close(fd[STDIN_FILENO]);
 	if (access(file, F_OK) != 0)
 	{
-		perror("Input file doesn't exist");
-		exit(EXIT_FAILURE);
+		error = ft_sprintf("no such file or directory: %s\n", file);
+		write(STDERR_FILENO, error, ft_strlen(error));
+		exit(2);
 	}
 	if (access(file, R_OK) != 0)
 	{

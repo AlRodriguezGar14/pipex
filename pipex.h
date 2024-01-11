@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 02:10:49 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/05 15:06:54 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/11 13:43:09 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include <unistd.h>
 # include <errno.h>
 # include "libft/libft.h"
+
+// definition of errors
+# define NO_SUCH_FILE 2
+# define CMD_NOT_FOUND 127
 
 typedef struct s_cmd
 {
