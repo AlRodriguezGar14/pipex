@@ -6,7 +6,7 @@
 /*   By: alberrod <alberrod@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:00:30 by alberrod          #+#    #+#             */
-/*   Updated: 2024/01/11 14:15:56 by alberrod         ###   ########.fr       */
+/*   Updated: 2024/01/12 20:24:08 by alberrod         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,16 @@ void	create_pipes(int fd_pipe[2])
 	}
 }
 
-void	fork_process(int *pid)
+int	fork_process()
 {
-	*pid = fork();
-	if (*pid == -1)
+	int	pid;
+	pid = fork();
+	if (pid == -1)
 	{
 		perror("Fork error");
 		exit(EXIT_FAILURE);
 	}
+	return (pid);
 }
 
 void	write_process(char *file, int *fd)
